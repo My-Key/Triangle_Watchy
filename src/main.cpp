@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <KaveWatchy.h>
+#include <TriangleWatchy.h>
 
 TriangleWatchy watchy;
 

@@ -1,29 +1,4 @@
-#include "KaveWatchy.h"
-
-const int posBatteryX = 15;
-const int posBatteryY = 15;
-
-const int posBatteryFillX = posBatteryX + 2;
-const int posBatteryFillY = posBatteryY + 14;
-
-const int posTimeCenterX = 120;
-const int posTimeY = 120;
-
-const int posAMPMTimeX = 160;
-const int posAMPMTimeY = 140;
-
-const int posDateX = 25;
-const int posDate1Y = 150;
-
-const int posDate2Y = 175;
-
-const int posStepsIconX = 137;
-const int posStepsIconY = 15;
-
-const int posStepsBGX = 51;
-const int posStepsBGY = 25;
-
-const int posStepsOffsetY = 22;
+#include "TriangleWatchy.h"
 
 const float VOLTAGE_MIN = 3.4;
 const float VOLTAGE_MAX = 4.2;
@@ -98,8 +73,6 @@ void TriangleWatchy::drawWatchFace()
   display.setTextColor(GxEPD_BLACK);
 
   drawTime();
-  //drawDate();
-  //drawBattery();
 }
 
 static Vector rotateVector(Vector vector, double angle)
@@ -190,24 +163,6 @@ void TriangleWatchy::drawTime()
     drawTriangle(corner1, corner2, corner3, {100,100}, GxEPD_BLACK);
   }
 
-  // for (int i = 1; i < 12; i++)
-  // {
-  //   if (i % 3 == 0)
-  //     continue;
-
-  //   double angle = STEP_HOUR * i;
-    
-  //   Vector tick1 = rotateVector(SMALL_TICK_1, angle);
-  //   Vector tick2 = rotateVector(SMALL_TICK_2, angle);
-  //   Vector tick3 = rotateVector(SMALL_TICK_3, angle);
-    
-  //   Vector tickCenter = rotateVector({0, -99}, angle);
-  //   tickCenter.x += 100;
-  //   tickCenter.y += 100;
-
-  //   drawTriangleFill(tick1, tick2, tick3, tickCenter, GxEPD_BLACK);
-  // }
-
   for (int i = 0; i < 4; i++)
   {    
     Vector tick1 = rotateVectorByRightAngle(SMALL_TICK_1, i);
@@ -292,111 +247,4 @@ void TriangleWatchy::drawTime()
   drawTriangleFill(PIN_1, PIN_2, PIN_3, minuteStart, GxEPD_BLACK);
 
   display.drawRect(1,1,199,199, GxEPD_BLACK);
-  // int16_t  x1, y1;
-  // uint16_t w, h;
-
-  // display.getTextBounds(String(":"), 0, 0, &x1, &y1, &w, &h);
-
-  // int colonXStart = posTimeCenterX - w / 2;
-  // int colonXEnd = posTimeCenterX + w / 2 + 4;
-
-  // String hourString = "";
-  
-  // if (hour < 10)
-  //   hourString += "0";
-  
-  // hourString += String(hour);
-
-  // display.getTextBounds(hourString, 0, 0, &x1, &y1, &w, &h);
-
-  // display.setCursor(colonXStart - w - 4, posTimeY);
-  // display.print(hourString);
-  
-  // display.setCursor(colonXStart, posTimeY);
-  // display.print(":");
-
-  // String minuteString = "";
-
-  // if (currentTime.Minute < 10)
-  //   minuteString += "0";
-
-  // minuteString += String(currentTime.Minute);
-
-  // display.setCursor(colonXEnd, posTimeY);
-  // display.print(minuteString);
-}
-
-const char* TriangleWatchy::Ordinal(uint8_t num)
-{
-  switch(num % 100)
-  {
-      case 11:
-      case 3:
-      case 13:
-        return "th";
-  }
-
-  switch(num % 10)
-  {
-      case 1:
-        return "st";
-      case 2:
-        return "nd";
-      case 3:
-        return "rd";
-      default:
-        return "th";
-  }
-}
-
-void TriangleWatchy::drawDate()
-{
-  //display.setFont(&NIOBRG__10pt7b);
-
-  String dayOfWeek = dayStr(currentTime.Wday);
-  String month = monthStr(currentTime.Month);
-
-  display.setCursor(posDateX, posDate1Y);
-  display.println(dayOfWeek);
-
-  display.setCursor(posDateX, posDate2Y);
-  display.print(month);
-  display.print(" ");
-
-  display.print(currentTime.Day);
-  
-  display.print(Ordinal(currentTime.Day));
-}
-
-void TriangleWatchy::drawBattery()
-{
-  float VBAT = getBatteryVoltage();
-
-  // 12 battery states
-  int batState = int(((VBAT - VOLTAGE_MIN) / VOLTAGE_RANGE) * 4);
-  if (batState > 4)
-    batState = 4;
-  if (batState < 0)
-    batState = 0;
-
-  // display.drawBitmap(posBatteryX, posBatteryY, epd_bitmap_Battery_BG, 29, 101, GxEPD_BLACK);
-
-  // switch(batState)
-  // {
-  //   case 4:
-  //     display.drawBitmap(posBatteryFillX, posBatteryFillY, epd_bitmap_Battery_Fill_100, 25, 60, GxEPD_WHITE);
-  //     break;
-  //   case 3:
-  //     display.drawBitmap(posBatteryFillX, posBatteryFillY, epd_bitmap_Battery_Fill_75, 25, 60, GxEPD_WHITE);
-  //     break;
-  //   case 2:
-  //     display.drawBitmap(posBatteryFillX, posBatteryFillY, epd_bitmap_Battery_Fill_50, 25, 60, GxEPD_WHITE);
-  //     break;
-  //   case 1:
-  //     display.drawBitmap(posBatteryFillX, posBatteryFillY, epd_bitmap_Battery_Fill_25, 25, 60, GxEPD_WHITE);
-  //     break;
-  //   default:
-  //     display.drawBitmap(posBatteryFillX, posBatteryFillY, epd_bitmap_Battery_Fill_0, 25, 60, GxEPD_WHITE);
-  //     break;
-  // }
 }
