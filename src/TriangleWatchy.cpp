@@ -87,6 +87,16 @@ static Vector rotateVector(Vector vector, double angle)
   return newVector;
 }
 
+static double dotProduct(Vector v1, Vector v2)
+{
+  return v1.x * v2.x + v1.y * v2.y;
+}
+
+static double crossProduct(Vector v1, Vector v2)
+{
+  return v1.x * v2.y - v1.y * v2.x;
+}
+
 static Vector rotateVectorByRightAngle(Vector vector, int angle)
 {
   angle = angle % 4;
@@ -203,7 +213,6 @@ void TriangleWatchy::drawTime()
     drawTriangle(tick1, tick2, tick3, tickCenter, GxEPD_BLACK);
   }
 
-  double degMinute = STEP_MINUTE * minute;
   double degHour = STEP_HOUR * ((double)hour + minute/60.0);
 
   Vector hour1 = rotateVector(HOUR_HAND_1, degHour);
@@ -218,15 +227,24 @@ void TriangleWatchy::drawTime()
 
   drawTriangleFill(PIN_1, PIN_2, PIN_3, center, GxEPD_BLACK);
 
+  double degMinute = STEP_MINUTE * minute;
+  
+  Vector minuteStart = rotateVector(MINUTE_HAND_START, degHour);
+  
+  // minuteStart = center;
+
+  // Calculate correct angle so offsetted minute hand point at current minute
+  Vector minuteTarget = rotateVector({0,-99}, degMinute);
+  Vector minuteVector = {minuteTarget.x - minuteStart.x, minuteTarget.y - minuteStart.y};
+  
+  degMinute = atan2(crossProduct({0,-1}, minuteVector), dotProduct({0,-1}, minuteVector)) * RAD_TO_DEG;
+
   Vector minute1 = rotateVector(MINUTE_HAND_1, degMinute);
   Vector minute2 = rotateVector(MINUTE_HAND_2, degMinute);
   Vector minute3 = rotateVector(MINUTE_HAND_3, degMinute);
 
-  Vector minuteStart = rotateVector(MINUTE_HAND_START, degHour);
   minuteStart.x = 100 + minuteStart.x;
   minuteStart.y = 100 + minuteStart.y;
-
-  // minuteStart = center;
   
   drawTriangleFill(minute1, minute2, minute3, minuteStart, GxEPD_BLACK);
 
