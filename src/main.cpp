@@ -1,7 +1,9 @@
 #include <Arduino.h>
 #include <TriangleWatchy.h>
 
-TriangleWatchy watchy;
+#include "settings.h"
+
+TriangleWatchy watchy(settings);
 
 void setup() {
   watchy.init();

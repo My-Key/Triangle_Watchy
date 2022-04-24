@@ -11,6 +11,7 @@ typedef struct Vector
 
 class TriangleWatchy : public Watchy
 {
+  using Watchy::Watchy;
 public:
   TriangleWatchy();
   void drawWatchFace();

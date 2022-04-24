@@ -62,11 +62,6 @@ const Vector CORNER_2 = {99, 33};
 const Vector CORNER_3 = {99, 99};
 const Vector CORNER_4 = {80, 80};
 
-TriangleWatchy::TriangleWatchy()
-{
-  // Serial.begin(115200);
-}
-
 void TriangleWatchy::drawWatchFace()
 {
   display.fillScreen(GxEPD_WHITE);
